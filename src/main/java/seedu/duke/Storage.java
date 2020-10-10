@@ -20,7 +20,7 @@ public class Storage {
         watchlistFilePath = storageDirectory + watchlistFileName;
     }
 
-    public UserProfile readUserProfileFile() throws ParseException, DukeException {
+    public UserProfile readUserProfileFile() throws ParseException, AniException {
         String fileString = readFile(userProfileFilePath);
         if (fileString.isBlank()) {
             return null;

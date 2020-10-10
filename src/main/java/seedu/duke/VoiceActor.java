@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class VoiceActor extends Human {
     protected ArrayList<Character> characters = new ArrayList<>();
 
-    public VoiceActor(String name) throws DukeException {
+    public VoiceActor(String name) throws AniException {
         super(name);
     }
 

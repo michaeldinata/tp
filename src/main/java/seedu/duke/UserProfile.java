@@ -9,7 +9,7 @@ public class UserProfile extends Human {
     protected Date birthdate;
     protected Gender gender;
 
-    public UserProfile(String name, String birthdate, String gender) throws ParseException, DukeException {
+    public UserProfile(String name, String birthdate, String gender) throws ParseException, AniException {
         super(name);
         setBirthdate(birthdate);
         setGender(gender);
@@ -38,6 +38,19 @@ public class UserProfile extends Human {
 
     public Gender getGender() {
         return gender;
+    }
+
+    /**
+     * Provides the name of the user with Japanese honorifics depending on his gender.
+     *
+     * @return name of user with honorifics.
+     */
+    public String getFancyName() {
+        if (gender == Gender.Female) {
+            return name + "-chan";
+        } else {
+            return name + "-san";
+        }
     }
 
     @Override

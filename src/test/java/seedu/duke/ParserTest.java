@@ -13,13 +13,13 @@ class ParserTest {
 
         String input = "";
 
-        assertThrows(DukeException.class, () -> {
+        assertThrows(AniException.class, () -> {
             parser.parseUserInput(input);
         });
     }
 
     @Test
-    public void parseUserInput_oneWord_returnsOneString() throws DukeException {
+    public void parseUserInput_oneWord_returnsOneString() throws AniException {
         Parser parser = new Parser();
 
         String input = "test";
@@ -29,7 +29,7 @@ class ParserTest {
     }
 
     @Test
-    public void parseUserInput_moreThanTwoWords_returnsTwoStrings() throws DukeException {
+    public void parseUserInput_moreThanTwoWords_returnsTwoStrings() throws AniException {
         Parser parser = new Parser();
 
         String input = "test more than two";

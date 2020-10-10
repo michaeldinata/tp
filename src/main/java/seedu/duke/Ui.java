@@ -1,14 +1,30 @@
 package seedu.duke;
 
 public class Ui {
+    private String logo = "                 _  _____ _                 \n"
+            + "     /\\         (_)/ ____| |                \n"
+            + "    /  \\   _ __  _| |    | |__   __ _ _ __  \n"
+            + "   / /\\ \\ | '_ \\| | |    | '_ \\ / _` | '_ \\ \n"
+            + "  / ____ \\| | | | | |____| | | | (_| | | | |\n"
+            + " /_/    \\_\\_| |_|_|\\_____|_| |_|\\__,_|_| |_|\n"
+            + "                                            \n"
+            + "                                            ";
+
+    /**
+     * Prints AniChan logo.
+     */
+    public void showLogo() {
+        System.out.println(logo);
+    }
 
     /**
      * Greets new user upon opening up application.
      */
     public void greetFirstTime() {
         System.out.println("Welcome to AniChan!");
+        showLogo();
         System.lineSeparator();
-        System.out.println("Let's get you started.");
+        System.out.println("Let's get you started!");
         System.out.println("Please enter your particulars:");
     }
 
@@ -16,7 +32,8 @@ public class Ui {
      * Greets existing user upon opening up application.
      */
     public void greetExisting(UserProfile userProfile) {
-        String userName = userProfile.toString();
+        String userName = userProfile.getFancyName();
+        showLogo();
         System.out.println("Welcome Back, " + userName);
         System.out.println();
     }
@@ -42,6 +59,21 @@ public class Ui {
      */
     public void showInvalidCommand() {
         System.out.println("Please enter a valid command!");
+        System.out.println();
+    }
+
+    /**
+     * Tells the user that the input given is wrong
+     * and shows the correct form of the command.
+     */
+    public void showInvalidDescription(String command) {
+        switch (command) {
+        case("addToWatchlist"):
+            System.out.println("The input needs to be of the form \"add -a AnimeName\"! ");
+            break;
+        default:
+            System.out.println("Please enter a valid input!");
+        }
         System.out.println();
     }
 

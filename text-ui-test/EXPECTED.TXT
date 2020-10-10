@@ -1,6 +1,6 @@
 User profile file is not found.
 Watchlist file is not found.
-Hello welcome to AniChan
+Welcome to AniChan!
                  _  _____ _                 
      /\         (_)/ ____| |                
     /  \   _ __  _| |    | |__   __ _ _ __  
@@ -9,7 +9,8 @@ Hello welcome to AniChan
  /_/    \_\_| |_|_|\_____|_| |_|\__,_|_| |_|
                                             
                                             
-Before we start, let me learn more about you!
+Let's get you started!
+Please enter your particulars:
 What's your name?
 Hello James Gosling! What might your date of birth be?
 What might your gender be? (Male/Female/Others)

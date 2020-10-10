@@ -16,6 +16,10 @@ public class Watchlist {
         this.animeList = animeList;
     }
 
+    public void addAnimeToList(String animeName) {
+        this.animeList.add(animeName);
+    }
+
     public String animeListInString() {
         StringBuilder sbAnimeList = new StringBuilder(System.lineSeparator());
         if (animeList.size() == 0) {
