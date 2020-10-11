@@ -11,6 +11,7 @@ public class Duke {
     private static Ui ui;
     private static AnimeData animeData;
     private static Storage storage;
+    private static Bookmark bookmark;
     private static final String USER_PROFILE_FILE_NAME = "userprofile.txt";
     private static final String WATCHLIST_FILE_NAME = "watchlist.txt";
     private static final Scanner CONSOLE = new Scanner(System.in);
@@ -50,6 +51,8 @@ public class Duke {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        bookmark = new Bookmark();
 
         createAnimeList();
         getCommand();
@@ -300,10 +303,74 @@ public class Duke {
      * Bookmarks an anime.
      */
     private static void bookmarkAnime(String description) {
-        // Code to be added
+        if (description.contains(" ")) {
+            String[] descriptionSplit = description.split(" ", 2);
+            // Code to be added
+            String commandOption = descriptionSplit[0];
+            String commandArgument = descriptionSplit[1];
+            if (commandOption.equals("-a")) {
+                if (isInteger(commandArgument)) {
+                    int animeDataListIndex = Integer.parseInt(commandArgument);
+                    Anime anime = animeData.getAnimeByID(animeDataListIndex);
+                    System.out.println("Saving " + anime.getAnimeID() + ". "
+                            + anime.getAnimeName() + " " + " to bookmark.");
+                    bookmark.addAnimeBookmark(anime.getAnimeName());
+                } else {
+                    ArrayList<Anime> findList = animeData.findName(commandArgument);
+                    for (Anime anime : findList) {
+                        System.out.println("\t" + anime.getAnimeID() + ". " + anime.getAnimeName());
+                    }
+                }
+            } else if (commandOption.equals("-d")) {
+                int bookmarkIndex = Integer.parseInt(commandArgument);
+                String animeName = bookmark.getAnimeBookmarkByIndex(bookmarkIndex - 1);
+                System.out.println("Removing " + animeName + "! :(");
+                bookmark.removeAnimeBookmark(bookmarkIndex - 1);
+            } else {
+                int bookmarkIndex = Integer.parseInt(commandOption);
+                String[] commandArgumentSplit = commandArgument.split(" ", 2);
+                String commandOption2 = commandArgumentSplit[0];
+                String commandArgument2 = commandArgumentSplit[1];
+                if (commandOption2.equals("-e")) {
+                    int episode = Integer.parseInt(commandArgument2);
+                    bookmark.editAnimeBookmarkEpisode(bookmarkIndex - 1, episode);
+                    String animeName = bookmark.getAnimeBookmarkByIndex(bookmarkIndex - 1);
+                    System.out.println("Editing " + animeName + " to have " + episode + " episode");
+                }
+            }
+        } else {
+            if (description.equals("-l")) {
+                String bookmarks = bookmark.animeListInString();
+                System.out.println(bookmarks);
+            }
+        }
+    }
 
-        // Print for testing
-        System.out.println("Anime bookmarked");
+    /**
+     * Check if input string provided is a valid string.
+     * False if string contains alpha, null and 0 length
+     * @param str : String to check
+     * @return
+     */
+    public static boolean isInteger(String str) {
+        int length = str.length();
+        if (length == 0) {
+            return false;
+        }
+        int i = 0;
+        if (str.charAt(0) == '-') {
+            if (length == 1) {
+                return false;
+            }
+            i = 1;
+        }
+        for (; i < length; i++) {
+            char c = str.charAt(i);
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
