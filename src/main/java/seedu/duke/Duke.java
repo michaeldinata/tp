@@ -310,10 +310,45 @@ public class Duke {
      * Shows help function.
      */
     private static void showHelp() {
-        // Code to be added
-
-        // Print for testing
-        System.out.println("Help showed");
+        System.out.println("Available commands:");
+        System.out.println("1. Add a profile (addprofile)");
+        System.out.println("2. Edit a profile (editprofile)");
+        System.out.println("3. Browse through all anime (browse)");
+        System.out.println("4. Create a watchlist (watchlist)");
+        System.out.println("5. Add to watchlist (add)");
+        System.out.println("6. Bookmark an anime (bookmark)");
+        System.out.println();
+        System.out.println("Enter the index of the command for which you would like more help");
+        String index = CONSOLE.nextLine();
+        
+        switch (index) {
+        case "1":
+            System.out.println("Create a new user profile");
+            System.out.println("Format: addprofile -n NAME -dob DATE_FORMAT -g GENDER");
+            break;
+        case "2":
+            System.out.println("Edit the current user profile");
+            System.out.println("Format: editprofile [-n NAME] [-dob DATE_FORMAT] [-g GENDER]");
+            break;
+        case "3":
+            System.out.println("Lists all anime");
+            System.out.println("Format: browse [-s SORT_CATEGORY] [-o SORT_ORDER] [-f FILTER_CATEGORY]");
+            break;
+        case "4":
+            System.out.println("Create a new watchlist");
+            System.out.println("Format: watchlist -n WATCHLIST_NAME");
+            break;
+        case "5":
+            System.out.println("Add an anime to the current watchlist");
+            System.out.println("Format: add -a ANIME_NAME");
+            break;
+        case "6":
+            System.out.println("Bookmark an anime");
+            System.out.println("Format: bookmark -a ANIME_NAME\n");
+            break;
+        default:
+            System.out.println("Please enter a valid index!");
+        }
     }
 
     //Sample Usage of AnimeList Class [To Be Deleted]

@@ -23,7 +23,6 @@ public class Ui {
     public void greetFirstTime() {
         System.out.println("Welcome to AniChan!");
         showLogo();
-        System.lineSeparator();
         System.out.println("Let's get you started!");
         System.out.println("Please enter your particulars:");
     }
