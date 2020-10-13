@@ -67,8 +67,6 @@ public class Duke {
             assert userManagement.getCurrentUser() != null;
         }
 
-
-
         do {
             String userInput = ui.readUserInput(userManagement.getCurrentUser().getName(), activeWatchlist.getName());
 
