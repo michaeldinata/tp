@@ -1,39 +1,53 @@
-package seedu.duke;
+package seedu.duke.ui;
+
+import seedu.duke.human.User;
+import java.util.Scanner;
 
 public class Ui {
-    private String logo = "                 _  _____ _                 \n"
-            + "     /\\         (_)/ ____| |                \n"
-            + "    /  \\   _ __  _| |    | |__   __ _ _ __  \n"
-            + "   / /\\ \\ | '_ \\| | |    | '_ \\ / _` | '_ \\ \n"
-            + "  / ____ \\| | | | | |____| | | | (_| | | | |\n"
-            + " /_/    \\_\\_| |_|_|\\_____|_| |_|\\__,_|_| |_|\n"
-            + "                                            \n"
-            + "                                            ";
+    private static final Scanner CONSOLE = new Scanner(System.in);
+    private static final String LOGO =
+            "                 _  _____ _\n"
+            + "      /\\         (_)/ ____| |\n"
+            + "     /  \\   _ __  _| |    | |__   __ _ _ __\n"
+            + "    / /\\ \\ | '_ \\| | |    | '_ \\ / _` | '_ \\\n"
+            + "   / ____ \\| | | | | |____| | | | (_| | | | |\n"
+            + "  /_/    \\_\\_| |_|_|\\_____|_| |_|\\__,_|_| |_|\n";
+    private static final String HORIZONTAL_LINE =
+            "-------------------------------------------------------------";
 
-    /**
-     * Prints AniChan logo.
-     */
-    public void showLogo() {
-        System.out.println(logo);
+    public void printMessage(String message) {
+        System.out.println(" " + message);
     }
 
-    /**
-     * Greets new user upon opening up application.
-     */
-    public void greetFirstTime() {
-        System.out.println("Welcome to AniChan!");
-        showLogo();
-        System.lineSeparator();
-        System.out.println("Let's get you started!");
-        System.out.println("Please enter your particulars:");
+    public void printErrorMessage(String errorMessage) {
+        System.out.println(" ☹ OOPS!!! " + errorMessage);
     }
 
+    public void printWelcomeMessage() {
+        printMessage("Welcome to AniChan!");
+        printMessage(LOGO);
+    }
+
+    public void printHorizontalLine() {
+        System.out.println(HORIZONTAL_LINE);
+    }
+
+    public String readInput() {
+        return CONSOLE.nextLine();
+    }
+
+    public String readUserInput(String userName, String watchlistName) {
+        System.out.print(System.lineSeparator() + " " + userName + "(" + watchlistName + ") #> ");
+        String userInput = CONSOLE.nextLine();
+        return userInput;
+    }
+
+    // TEMPORARY, REMOVED WHEN DONE REFACTORING!
     /**
      * Greets existing user upon opening up application.
      */
-    public void greetExisting(UserProfile userProfile) {
-        String userName = userProfile.name;
-        showLogo();
+    public void greetExisting(User user) {
+        String userName = user.getName();
         System.out.println("Welcome Back, " + userName);
         System.out.println();
     }
@@ -80,7 +94,7 @@ public class Ui {
     /**
      * Prints out bye message.
      */
-    public void bye() {
+    public void printGoodbyeMessage() {
         System.out.println("Sayonara!");
     }
 }

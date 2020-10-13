@@ -1,13 +1,15 @@
-package seedu.duke;
+package seedu.duke.human;
+
+import seedu.duke.exception.AniException;
 
 public abstract class Human {
     protected String name;
 
-    public Human(String name) throws DukeException {
+    public Human(String name) throws AniException {
         if (!name.isEmpty()) {
             setName(name);
         } else {
-            throw new DukeException();
+            throw new AniException("Is your name empty?");
         }
     }
 

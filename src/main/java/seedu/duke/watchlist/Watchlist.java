@@ -1,4 +1,4 @@
-package seedu.duke;
+package seedu.duke.watchlist;
 
 import java.util.ArrayList;
 
@@ -16,12 +16,20 @@ public class Watchlist {
         this.animeList = animeList;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<String> getAnimeList() {
+        return animeList;
+    }
+
     public void addAnimeToList(String animeName) {
         this.animeList.add(animeName);
     }
 
-    public String animeListInString() {
-        StringBuilder sbAnimeList = new StringBuilder(System.lineSeparator());
+    public String animeListToString() {
+        StringBuilder sbAnimeList = new StringBuilder();
         if (animeList.size() == 0) {
             sbAnimeList.append("Uhh.. It's empty.. :(");
             sbAnimeList.append(System.lineSeparator());
@@ -39,7 +47,7 @@ public class Watchlist {
 
     @Override
     public String toString() {
-        return name + animeListInString();
+        return name + System.lineSeparator() + animeListToString();
     }
 
     public String toFileString() {

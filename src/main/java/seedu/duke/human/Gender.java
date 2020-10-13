@@ -1,4 +1,4 @@
-package seedu.duke;
+package seedu.duke.human;
 
 public enum Gender {
     Male,

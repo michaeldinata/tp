@@ -1,25 +1,28 @@
-package seedu.duke;
+package seedu.duke.human;
 
 import org.junit.jupiter.api.Test;
+import seedu.duke.exception.AniException;
+import seedu.duke.human.Character;
+import seedu.duke.human.VoiceActor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CharacterTest {
 
     @Test
-    public void testCharacterCreation() throws DukeException {
+    public void testCharacterCreation() throws AniException {
         Character kirito = new Character("Kirito");
         assertEquals("Kirito", kirito.toString());
     }
 
     @Test
-    void getTotalVoiceActors_emptyList_returnZero() throws DukeException {
+    void getTotalVoiceActors_emptyList_returnZero() throws AniException {
         Character kirito = new Character("Kirito");
         assertEquals(0, kirito.getTotalVoiceActors());
     }
 
     @Test
-    void getTotalVoiceActors_addTwo_returnTwo() throws DukeException {
+    void getTotalVoiceActors_addTwo_returnTwo() throws AniException {
         Character kirito = new Character("Kirito");
 
         // Make voice actors

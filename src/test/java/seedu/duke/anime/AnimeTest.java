@@ -1,6 +1,7 @@
-package seedu.duke;
+package seedu.duke.anime;
 
 import org.junit.jupiter.api.Test;
+import seedu.duke.anime.Anime;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

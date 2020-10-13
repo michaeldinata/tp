@@ -1,51 +1,25 @@
-User profile file is not found.
-Watchlist file is not found.
-Welcome to AniChan!
-                 _  _____ _                 
-     /\         (_)/ ____| |                
-    /  \   _ __  _| |    | |__   __ _ _ __  
-   / /\ \ | '_ \| | |    | '_ \ / _` | '_ \ 
-  / ____ \| | | | | |____| | | | (_| | | | |
- /_/    \_\_| |_|_|\_____|_| |_|\__,_|_| |_|
-                                            
-                                            
-Let's get you started!
-Please enter your particulars:
-What's your name?
-Hello James Gosling! What might your date of birth be?
-What might your gender be? (Male/Female/Others)
-Name= James Gosling, birthdate= 01/02/1999, gender= Male
-===Running Sample Anime Class===
-Release Date in String: 30/Dec/2020
-===End of Sample Anime Class===
-===Running Anime Data Print check===
-===End of Anime Data Print check===
-===Running Sample Anime List Class===
----------------------------------
-Index: 1
-Name: Adventures of Adventurers
-Episodes: 24
-Release Date:30/Dec/2020
-Rating: 65
-Genre: [Science, Action, Dance]
----------------------------------
-Index: 2
-Name: Actions in Action
-Episodes: 13
-Release Date:15/Apr/1997
-Rating: 80
-Genre: [Adventure, Action, Dance]
-===End of Sample Anime List Class===
-What would you like to do today?
-1. Add a profile (addprofile)
-2. Edit a profile (editprofile)
-3. Browse through all anime (browse)
-4. Create a watchlist (watchlist)
-5. Add to watchlist (add)
-6. Bookmark an anime (bookmark)
-7. Help (help)
-8. Exit (exit)
+ Welcome to AniChan!
+                  _  _____ _
+      /\         (_)/ ____| |
+     /  \   _ __  _| |    | |__   __ _ _ __
+    / /\ \ | '_ \| | |    | '_ \ / _` | '_ \
+   / ____ \| | | | | |____| | | | (_| | | | |
+  /_/    \_\_| |_|_|\_____|_| |_|\__,_|_| |_|
 
-Watchlist created successfully!
-Watchlist created successfully!
-Sayonara!
+-------------------------------------------------------------
+ User profile file is not found.
+ Watchlist file is not found.
+-------------------------------------------------------------
+ What's your name?
+ Hello Abec! What might your date of birth be? (DD/MM/YYYY)
+ What might your gender be? (Male/Female/Other)
+ Successfully added new user: 
+Name: Abec
+Birthdate: 01/02/1996
+Gender: Female
+
+ Abec-chan(Default) #>  Watchlist created successfully!
+
+ Abec-chan(Default) #>  Watchlist created successfully!
+
+ Abec-chan(Default) #> Sayonara!

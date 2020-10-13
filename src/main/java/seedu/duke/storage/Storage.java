@@ -1,4 +1,9 @@
-package seedu.duke;
+package seedu.duke.storage;
+
+import seedu.duke.ui.Ui;
+import seedu.duke.watchlist.Watchlist;
+import seedu.duke.exception.AniException;
+import seedu.duke.human.User;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,22 +25,30 @@ public class Storage {
         watchlistFilePath = storageDirectory + watchlistFileName;
     }
 
-    public UserProfile readUserProfileFile() throws ParseException, DukeException {
-        String fileString = readFile(userProfileFilePath);
-        if (fileString.isBlank()) {
-            return null;
+    public User readUserProfileFile(Ui ui) {
+        User user = null;
+        try {
+            String fileString = readFile(ui, userProfileFilePath);
+            if (fileString.isBlank()) {
+                return user;
+            }
+
+            String[] fileStringParts = fileString.split(FILE_LINE_DELIMITER);
+            String name = fileStringParts[0];
+            String birthDate = fileStringParts[1];
+            String gender = fileStringParts[2];
+            gender = gender.replaceAll("(\\r|\\n)", "");
+            user = new User(name, birthDate, gender);
+        } catch (AniException | ParseException exception) {
+            ui.printMessage("User profile object creation has failed.");
         }
 
-        String[] fileStringParts = fileString.split(FILE_LINE_DELIMITER);
-        String name = fileStringParts[0];
-        String birthDate = fileStringParts[1];
-        String gender = fileStringParts[2];
-        return new UserProfile(name, birthDate, gender);
+        return user;
     }
 
-    public ArrayList<Watchlist> readWatchlistFile() {
+    public ArrayList<Watchlist> readWatchlistFile(Ui ui) {
         ArrayList<Watchlist> watchlists = new ArrayList<>();
-        String fileString = readFile(watchlistFilePath);
+        String fileString = readFile(ui, watchlistFilePath);
         if (fileString.isBlank()) {
             return watchlists;
         }
@@ -59,7 +72,7 @@ public class Storage {
         return watchlists;
     }
 
-    private String readFile(String filePath) {
+    private String readFile(Ui ui, String filePath) {
         StringBuilder sbFileString = new StringBuilder();
         try {
             File fileToRead = new File(filePath);
@@ -72,37 +85,39 @@ public class Storage {
             }
         } catch (FileNotFoundException exception) {
             if (filePath.equals(userProfileFilePath)) {
-                System.out.println("User profile file is not found.");
+                ui.printHorizontalLine();
+                ui.printMessage("User profile file is not found.");
             } else {
-                System.out.println("Watchlist file is not found.");
+                ui.printMessage("Watchlist file is not found.");
+                ui.printHorizontalLine();
             }
         }
 
         return sbFileString.toString();
     }
 
-    public void writeUserProfileFile(UserProfile userProfile) throws NullPointerException {
-        String userProfileString = userProfile.toFileString();
-        writeFile(userProfileFilePath, userProfileString);
+    public void writeUserProfileFile(Ui ui, User user) {
+        String userProfileString = user.toFileString();
+        writeFile(ui, userProfileFilePath, userProfileString);
     }
 
-    public void writeWatchlistFile(ArrayList<Watchlist> watchlists) {
+    public void writeWatchlistFile(Ui ui, ArrayList<Watchlist> watchlists) {
         StringBuilder sbWatchlistString = new StringBuilder();
         for (Watchlist watchlist : watchlists) {
             sbWatchlistString.append(watchlist.toFileString());
             sbWatchlistString.append(System.lineSeparator());
         }
-        writeFile(watchlistFilePath, sbWatchlistString.toString());
+        writeFile(ui, watchlistFilePath, sbWatchlistString.toString());
     }
 
-    private void writeFile(String filePath, String fileString) {
+    private void writeFile(Ui ui, String filePath, String fileString) {
         new File(storageDirectory).mkdirs();
         try {
             FileWriter fileWriter = new FileWriter(filePath);
             fileWriter.write(fileString);
             fileWriter.close();
         } catch (IOException exception) {
-            System.out.println("Error occurred while writing to file.");
+            ui.printErrorMessage("Error occurred while writing to file.");
         }
     }
 }

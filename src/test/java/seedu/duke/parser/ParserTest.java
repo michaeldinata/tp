@@ -1,6 +1,8 @@
-package seedu.duke;
+package seedu.duke.parser;
 
 import org.junit.jupiter.api.Test;
+import seedu.duke.exception.AniException;
+import seedu.duke.parser.Parser;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -13,13 +15,13 @@ class ParserTest {
 
         String input = "";
 
-        assertThrows(DukeException.class, () -> {
+        assertThrows(AniException.class, () -> {
             parser.parseUserInput(input);
         });
     }
 
     @Test
-    public void parseUserInput_oneWord_returnsOneString() throws DukeException {
+    public void parseUserInput_oneWord_returnsOneString() throws AniException {
         Parser parser = new Parser();
 
         String input = "test";
@@ -29,7 +31,7 @@ class ParserTest {
     }
 
     @Test
-    public void parseUserInput_moreThanTwoWords_returnsTwoStrings() throws DukeException {
+    public void parseUserInput_moreThanTwoWords_returnsTwoStrings() throws AniException {
         Parser parser = new Parser();
 
         String input = "test more than two";

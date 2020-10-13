@@ -1,6 +1,9 @@
-package seedu.duke;
+package seedu.duke.anime;
 
 import org.junit.jupiter.api.Test;
+import seedu.duke.anime.Anime;
+import seedu.duke.anime.AnimeData;
+
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

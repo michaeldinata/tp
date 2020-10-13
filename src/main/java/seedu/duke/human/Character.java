@@ -1,11 +1,13 @@
-package seedu.duke;
+package seedu.duke.human;
+
+import seedu.duke.exception.AniException;
 
 import java.util.ArrayList;
 
 public class Character extends Human {
     protected ArrayList<VoiceActor> voiceActors = new ArrayList<>();
 
-    public Character(String name) throws DukeException {
+    public Character(String name) throws AniException {
         super(name);
     }
 

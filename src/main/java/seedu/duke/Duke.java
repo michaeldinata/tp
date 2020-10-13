@@ -1,148 +1,101 @@
 package seedu.duke;
 
+import seedu.duke.anime.Anime;
+import seedu.duke.anime.AnimeData;
+import seedu.duke.anime.AnimeStorage;
+import seedu.duke.bookmark.Bookmark;
+import seedu.duke.command.Command;
+import seedu.duke.exception.AniException;
+import seedu.duke.human.UserManagement;
+import seedu.duke.parser.Parser;
+import seedu.duke.storage.Storage;
+import seedu.duke.ui.Ui;
+import seedu.duke.watchlist.Watchlist;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
 
 public class Duke {
-    private static ArrayList<Watchlist> watchlists;
-    private static Ui ui;
-    private static AnimeData animeData;
-    private static Storage storage;
     private static final String USER_PROFILE_FILE_NAME = "userprofile.txt";
     private static final String WATCHLIST_FILE_NAME = "watchlist.txt";
-    private static final Scanner CONSOLE = new Scanner(System.in);
+    private static final String ANIME_DATA_SOURCE_FOLDER = "/data/AniListData";
 
-    /**
-     * Main entry-point for the java.duke.Duke application.
-     */
-    public static void main(String[] args) {
+
+    private Ui ui;
+    private Parser parser;
+    private Storage storage;
+    private UserManagement userManagement;
+    private AnimeStorage animeStorage;
+    private ArrayList<Watchlist> watchlists;
+    private AnimeData animeData;
+    private Bookmark bookmark;
+    private Watchlist activeWatchlist;
+
+    public Duke() {
         ui = new Ui();
+        ui.printWelcomeMessage();
+        parser = new Parser();
         storage = new Storage(USER_PROFILE_FILE_NAME, WATCHLIST_FILE_NAME);
-
-        UserProfile userProfile = null;
-        try {
-            userProfile = storage.readUserProfileFile();
-        } catch (ParseException | DukeException exception) {
-            System.out.println("User profile data is corrupted or not found!");
-        }
-
-        watchlists = storage.readWatchlistFile();
-        if (userProfile == null) {
-            userProfile = quickStart();
-            storage.writeUserProfileFile(userProfile);
-        } else {
-            ui.greetExisting(userProfile);
-        }
-
-        addAnime();
+        userManagement = new UserManagement(ui, storage);
+        userManagement.setCurrentUser(storage.readUserProfileFile(ui));
+        watchlists = storage.readWatchlistFile(ui);
+        bookmark = new Bookmark();
 
         try {
-            System.out.println("===Running Anime Data Print check===");
-            AnimeStorage animeStorage = new AnimeStorage("/data/AniListData");
+            animeStorage = new AnimeStorage(ANIME_DATA_SOURCE_FOLDER);
             animeData = new AnimeData(animeStorage.readAnimeDatabase());
-            //animeData.printAll();
-            //animeData.printOne(1);
-            System.out.println("===End of Anime Data Print check===");
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        createAnimeList();
-        getCommand();
-    }
-
-    private static UserProfile quickStart() {
-        ui.greetFirstTime();
-
-        UserProfile userProfile = null;
-        boolean profileMade = false;
-        while (!profileMade) {
-            try {
-                userProfile = createProfile();
-                profileMade = true;
-            } catch (ParseException e) {
-                System.out.println("Is your date in dd/MM/yyyy format?");
-            } catch (DukeException e) {
-                System.out.println("Is your name empty?");
-            }
+        if (watchlists.isEmpty()) {
+            activeWatchlist = new Watchlist("Default");
+            watchlists.add(activeWatchlist);
+            storage.writeWatchlistFile(ui, watchlists);
+        } else {
+            activeWatchlist = watchlists.get(0);
         }
 
-        return userProfile;
+        // Assert
+        assert userManagement != null;
     }
 
-    private static UserProfile createProfile() throws ParseException, DukeException {
-        System.out.println("What's your name?");
-        String name = CONSOLE.nextLine();
-        System.out.println("Hello " + name + "! What might your date of birth be?");
-        String dob = CONSOLE.nextLine();
-        System.out.println("What might your gender be? (Male/Female/Others)");
-        String gender = CONSOLE.nextLine();
-
-        UserProfile newProfile = new UserProfile(name, dob, gender);
-        System.out.println(newProfile);
-        return newProfile;
-    }
-
-    /**
-     * Prints the main menu of the application
-     * and requests for command.
-     */
-    private static void getCommand() {
-        System.out.println("What would you like to do today?");
-        Parser parser = new Parser();
-        ui.showMainMenu();
-
-        while (CONSOLE.hasNextLine()) {
-            String fullCommand = CONSOLE.nextLine();
-            try {
-                String[] fullCommandSplit = parser.parseUserInput(fullCommand);
-
-                String description = "";
-                String command = fullCommandSplit[0];
-                if (fullCommandSplit.length > 1) {
-                    description = fullCommandSplit[1];
-                }
-
-                switch (command) {
-                case "addprofile":
-                    addProfile(description);
-                    break;
-                case "editprofile":
-                    editProfile(description);
-                    break;
-                case "browse":
-                    browseAnime(description);
-                    break;
-                case "watchlist":
-                    createWatchlist(description);
-                    break;
-                case "add":
-                    addToWatchlist(description);
-                    break;
-                case "bookmark":
-                    bookmarkAnime(description);
-                    break;
-                case "help":
-                    showHelp();
-                    break;
-                case "exit":
-                    ui.bye();
-                    return;
-                default:
-                    System.out.println("??");
-                    throw new DukeException();
-                }
-            } catch (DukeException e) {
-                ui.showInvalidCommand();
-            }
+    public void run() {
+        Command command = null;
+        if (userManagement.getCurrentUser() == null) {
+            userManagement.addUserDialogue();
+            assert userManagement.getCurrentUser() != null;
         }
+
+
+
+        do {
+            String userInput = ui.readUserInput(userManagement.getCurrentUser().getName(), activeWatchlist.getName());
+
+            try {
+                command = Parser.getCommand(userInput);
+                // now passing in many parameters into execute,
+                // but maybe can reduce in the future after refactoring?
+                command.execute(ui, storage, animeData, activeWatchlist, watchlists, bookmark, userManagement);
+            } catch (AniException exception) {
+                ui.printErrorMessage(exception.getMessage());
+            }
+        } while (!Command.isExit(command));
     }
+
+    public static void main(String[] args) {
+        new Duke().run();
+    }
+
+    // TODO: Organize the methods below to their respective class.
+    // TEMPORARY, REMOVE ALL BELOW WHEN DONE REFACTORING!
+
+
+    private static final Scanner CONSOLE = new Scanner(System.in);
+
 
     // Sample usage of Anime Class [To Be Deleted]
-    private static void addAnime() {
+    private void addAnime() {
         System.out.println("===Running Sample Anime Class===");
         String[] releaseDate = {"2020", "12", "30"};
         String[] genre = {"Science", "Action", "Dance"};
@@ -157,44 +110,11 @@ public class Duke {
         System.out.println("===End of Sample Anime Class===");
     }
 
-    private static void createWatchlist(String description) {
-        String[] descriptionSplit = description.split(" ", 2);
-        String commandOption = descriptionSplit[0];
-        String watchlistName = descriptionSplit[1];
-
-        if (commandOption.equals("-n")) {
-            Watchlist newWatchlist = new Watchlist(watchlistName);
-            watchlists.add(newWatchlist);
-        }
-
-        storage.writeWatchlistFile(watchlists);
-        System.out.println("Watchlist created successfully!");
-    }
-
-    /**
-     * Adds a new user profile.
-     */
-    private static void addProfile(String description) {
-        // Code to be added
-
-        // Print for testing
-        System.out.println("New profile added!");
-    }
-
-    /**
-     * Edits an existing user profile.
-     */
-    private static void editProfile(String description) {
-        // Code to be added
-
-        // Print for testing
-        System.out.println("Profile edited!");
-    }
 
     /**
      * Browses the list of anime.
      */
-    public static void browseAnime(String description) {
+    public void browseAnime(String description) {
         Scanner input = new Scanner(System.in);
         //Browse Feature (Bare and un-refactored)
         System.out.println("Browse Options:"
@@ -272,51 +192,8 @@ public class Duke {
         }
     }
 
-    /**
-     * Adds an anime to current watchlist.
-     */
-    private static void addToWatchlist(String description) {
-        String[] descriptionSplit = description.split(" ", 2);
-
-        try {
-            String commandOption = descriptionSplit[0];
-            String animeName = descriptionSplit[1];
-
-            if (commandOption.equals("-a") && animeName != null && !animeName.trim().isEmpty()) {
-                // currently only adding anime to default watchlist before
-                // implementing the selecting of watchlist
-                Watchlist currentWatchlist = watchlists.get(0);
-                currentWatchlist.addAnimeToList(animeName);
-            } else {
-                ui.showInvalidDescription("addToWatchlist");
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            ui.showInvalidDescription("addToWatchlist");
-        }
-    }
-
-    /**
-     * Bookmarks an anime.
-     */
-    private static void bookmarkAnime(String description) {
-        // Code to be added
-
-        // Print for testing
-        System.out.println("Anime bookmarked");
-    }
-
-    /**
-     * Shows help function.
-     */
-    private static void showHelp() {
-        // Code to be added
-
-        // Print for testing
-        System.out.println("Help showed");
-    }
-
     //Sample Usage of AnimeList Class [To Be Deleted]
-    private static void createAnimeList() {
+    private void createAnimeList() {
         System.out.println("===Running Sample Anime List Class===");
         ArrayList<Anime> animeStorageList = new ArrayList<>();
         String[] releaseDate = {"2020", "12", "30"};

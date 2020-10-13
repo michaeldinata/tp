@@ -1,4 +1,6 @@
-package seedu.duke;
+package seedu.duke.anime;
+
+import seedu.duke.human.Character;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
