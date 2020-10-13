@@ -19,6 +19,12 @@ public class Ui {
         System.out.println(" " + message);
     }
 
+    public void printCommandOutput(String output) {
+        if (!output.equals("")) {
+            System.out.println(output);
+        }
+    }
+
     public void printErrorMessage(String errorMessage) {
         System.out.println(" ☹ OOPS!!! " + errorMessage);
     }
@@ -97,4 +103,8 @@ public class Ui {
     public void printGoodbyeMessage() {
         System.out.println("Sayonara!");
     }
+
+
+
+
 }

@@ -5,7 +5,6 @@ import seedu.duke.bookmark.Bookmark;
 import seedu.duke.exception.AniException;
 import seedu.duke.human.UserManagement;
 import seedu.duke.storage.Storage;
-import seedu.duke.ui.Ui;
 import seedu.duke.watchlist.Watchlist;
 
 import java.util.ArrayList;
@@ -26,24 +25,24 @@ public class WatchlistCommand extends Command {
     }
 
     @Override
-    public void execute(Ui ui, Storage storage, AnimeData animeData, Watchlist currentWatchlist,
+    public String execute(AnimeData animeData, Watchlist currentWatchlist,
                         ArrayList<Watchlist> watchlists, Bookmark bookmark, UserManagement userManagement)
             throws AniException {
         if (CREATE_OPTION.equals(option)) {
-            createWatchlist(ui, storage, watchlists);
+            createWatchlist(userManagement.getStorage(), watchlists);
+            return "Watchlist created successfully!";
         } else {
             throw new AniException("Watchlist command only accepts the option: \"-n\".");
         }
     }
 
-    public void createWatchlist(Ui ui, Storage storage, ArrayList<Watchlist> watchlists) throws AniException {
+    public void createWatchlist(Storage storage, ArrayList<Watchlist> watchlists) throws AniException {
         if (optionInformation.isBlank()) {
             throw new AniException("Watchlist name cannot be empty.");
         }
 
         Watchlist newWatchlist = new Watchlist(optionInformation);
         watchlists.add(newWatchlist);
-        storage.writeWatchlistFile(ui, watchlists);
-        ui.printMessage("Watchlist created successfully!");
+        storage.writeWatchlistFile(watchlists);
     }
 }

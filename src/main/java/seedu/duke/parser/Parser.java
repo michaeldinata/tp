@@ -17,7 +17,7 @@ public class Parser {
      * Prints the main menu of the application
      * and requests for command.
      */
-    public static Command getCommand(String fullCommand) throws AniException {
+    public Command getCommand(String fullCommand) throws AniException {
         String[] fullCommandSplit = parseUserInput(fullCommand);
         String description = "";
         String command = fullCommandSplit[0];

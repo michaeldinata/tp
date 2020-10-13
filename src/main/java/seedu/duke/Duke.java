@@ -26,19 +26,21 @@ public class Duke {
     private Storage storage;
     private UserManagement userManagement;
     private AnimeStorage animeStorage;
-    private ArrayList<Watchlist> watchlists;
-    private AnimeData animeData;
     private Bookmark bookmark;
+    private ArrayList<Watchlist> watchlists;
     private Watchlist activeWatchlist;
+    private AnimeData animeData;
 
     public Duke() {
         ui = new Ui();
-        ui.printWelcomeMessage();
+        ui.printWelcomeMessage(); //TODO: Move this out of constructor
         parser = new Parser();
         storage = new Storage(USER_PROFILE_FILE_NAME, WATCHLIST_FILE_NAME);
-        userManagement = new UserManagement(ui, storage);
+        userManagement = new UserManagement(storage);
         userManagement.setCurrentUser(storage.readUserProfileFile(ui));
         watchlists = storage.readWatchlistFile(ui);
+
+        //Initial SET UP for AnimeStorage / WatchLists / UserManagement / bookmark
         bookmark = new Bookmark();
 
         try {
@@ -47,37 +49,44 @@ public class Duke {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         if (watchlists.isEmpty()) {
             activeWatchlist = new Watchlist("Default");
             watchlists.add(activeWatchlist);
-            storage.writeWatchlistFile(ui, watchlists);
+            try {
+                storage.writeWatchlistFile(watchlists);
+            } catch (AniException exception) {
+                ui.printErrorMessage(exception.getMessage());
+            }
         } else {
             activeWatchlist = watchlists.get(0);
         }
 
         // Assert
         assert userManagement != null;
+        // Creates new User if no detected user
+        if (userManagement.getCurrentUser() == null) {
+            userManagement.addUserDialogue(ui);
+            assert userManagement.getCurrentUser() != null;
+        }
     }
 
     public void run() {
-        Command command = null;
-        if (userManagement.getCurrentUser() == null) {
-            userManagement.addUserDialogue();
-            assert userManagement.getCurrentUser() != null;
-        }
-
+        boolean shouldExit = false;
         do {
             String userInput = ui.readUserInput(userManagement.getCurrentUser().getName(), activeWatchlist.getName());
-
             try {
-                command = Parser.getCommand(userInput);
-                // now passing in many parameters into execute,
-                // but maybe can reduce in the future after refactoring?
-                command.execute(ui, storage, animeData, activeWatchlist, watchlists, bookmark, userManagement);
+                Command command = parser.getCommand(userInput);
+                String output = command.execute(animeData, activeWatchlist, watchlists, bookmark, userManagement);
+                ui.printCommandOutput(output);
+                shouldExit = command.isExit();
             } catch (AniException exception) {
                 ui.printErrorMessage(exception.getMessage());
             }
-        } while (!Command.isExit(command));
+        } while (!shouldExit);
+
+        //Program Terminates here
+        ui.printGoodbyeMessage();
     }
 
     public static void main(String[] args) {
@@ -86,8 +95,6 @@ public class Duke {
 
     // TODO: Organize the methods below to their respective class.
     // TEMPORARY, REMOVE ALL BELOW WHEN DONE REFACTORING!
-
-
     private static final Scanner CONSOLE = new Scanner(System.in);
 
     //Sample Usage of AnimeList Class [To Be Deleted]

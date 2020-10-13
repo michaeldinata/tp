@@ -5,8 +5,6 @@ import seedu.duke.anime.AnimeData;
 import seedu.duke.bookmark.Bookmark;
 import seedu.duke.exception.AniException;
 import seedu.duke.human.UserManagement;
-import seedu.duke.storage.Storage;
-import seedu.duke.ui.Ui;
 import seedu.duke.watchlist.Watchlist;
 
 import java.util.ArrayList;
@@ -38,7 +36,7 @@ public class BrowseCommand extends Command {
     }
 
     @Override
-    public void execute(Ui ui, Storage storage, AnimeData animeData,
+    public String execute(AnimeData animeData,
                         Watchlist currentWatchlist, ArrayList<Watchlist> watchlists,
                         Bookmark bookmark, UserManagement userManagement) throws AniException {
         //Parameter Parser for Browse Command
@@ -58,21 +56,24 @@ public class BrowseCommand extends Command {
 
         //Assert to ensure that sortType and orderType are all usable int
         assert (sortType < 3) : "sortType should be < 3";
-
         assert (order < 2) : "order should be < 2";
         sortBrowseList(usableList);
         //else no sort ascending
 
+        String result = "";
         for (int i = indexToPrint; i < indexToPrint + 20; i++) {
             Anime browseAnime = usableList.get(i);
-            System.out.println(i + 1 + ". " + browseAnime.getAnimeName());
+            result += Integer.toString(i + 1) + ". " + browseAnime.getAnimeName() + System.lineSeparator();
+            //System.out.println(i + 1 + ". " + browseAnime.getAnimeName());
             if (i + 1 >= usableList.size()) {
                 logger.log(Level.WARNING, "Printing Last Anime Series from source");
                 break;
             }
         }
-        System.out.println("Browsing Page: " + page);
+        result += "Browsing Page: " + page;
+        //System.out.println("Browsing Page: " + page);
         usableList.sort(Comparator.comparing(Anime::getAnimeID));
+        return result;
     }
 
     private void sortBrowseList(ArrayList<Anime> usableList) {

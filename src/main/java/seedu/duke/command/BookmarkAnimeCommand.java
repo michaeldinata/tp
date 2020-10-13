@@ -4,8 +4,6 @@ import seedu.duke.anime.Anime;
 import seedu.duke.anime.AnimeData;
 import seedu.duke.bookmark.Bookmark;
 import seedu.duke.human.UserManagement;
-import seedu.duke.storage.Storage;
-import seedu.duke.ui.Ui;
 import seedu.duke.watchlist.Watchlist;
 
 import java.util.ArrayList;
@@ -18,8 +16,9 @@ public class BookmarkAnimeCommand extends Command {
 
 
     @Override
-    public void execute(Ui ui, Storage storage, AnimeData animeData, Watchlist currentWatchlist,
+    public String execute(AnimeData animeData, Watchlist currentWatchlist,
                         ArrayList<Watchlist> watchlists, Bookmark bookmark, UserManagement userManagement) {
+        String result = "";
         if (description.contains(" ")) {
             String[] descriptionSplit = description.split(" ", 2);
             // Code to be added
@@ -29,19 +28,22 @@ public class BookmarkAnimeCommand extends Command {
                 if (isInteger(commandArgument)) {
                     int animeDataListIndex = Integer.parseInt(commandArgument);
                     Anime anime = animeData.getAnimeByID(animeDataListIndex);
-                    System.out.println("Saving " + anime.getAnimeID() + ". "
-                            + anime.getAnimeName() + " " + " to bookmark.");
+                    result = "Saving " + anime.getAnimeID() + ". " + anime.getAnimeName() + " " + " to bookmark.";
+                    //System.out.println("Saving " + anime.getAnimeID() + ".
+                    // + anime.getAnimeName() + " " + " to bookmark.");
                     bookmark.addAnimeBookmark(anime.getAnimeName());
                 } else {
                     ArrayList<Anime> findList = animeData.findName(commandArgument);
                     for (Anime anime : findList) {
-                        System.out.println("\t" + anime.getAnimeID() + ". " + anime.getAnimeName());
+                        result += "\t" + anime.getAnimeID() + ". " + anime.getAnimeName() + System.lineSeparator();
+                        //System.out.println("\t" + anime.getAnimeID() + ". " + anime.getAnimeName());
                     }
                 }
             } else if (commandOption.equals("-d")) {
                 int bookmarkIndex = Integer.parseInt(commandArgument);
                 String animeName = bookmark.getAnimeBookmarkByIndex(bookmarkIndex - 1);
-                System.out.println("Removing " + animeName + "! :(");
+                result = "Removing " + animeName + "! :(";
+                //System.out.println("Removing " + animeName + "! :(");
                 bookmark.removeAnimeBookmark(bookmarkIndex - 1);
             } else {
                 int bookmarkIndex = Integer.parseInt(commandOption);
@@ -52,15 +54,18 @@ public class BookmarkAnimeCommand extends Command {
                     int episode = Integer.parseInt(commandArgument2);
                     bookmark.editAnimeBookmarkEpisode(bookmarkIndex - 1, episode);
                     String animeName = bookmark.getAnimeBookmarkByIndex(bookmarkIndex - 1);
-                    System.out.println("Editing " + animeName + " to have " + episode + " episode");
+                    result = "Editing " + animeName + " to have " + episode + " episode";
+                    //System.out.println("Editing " + animeName + " to have " + episode + " episode");
                 }
             }
         } else {
             if (description.equals("-l")) {
                 String bookmarks = bookmark.animeListInString();
-                System.out.println(bookmarks);
+                result = bookmarks;
+                //System.out.println(bookmarks);
             }
         }
+        return result;
     }
 
     public boolean isInteger(String str) {

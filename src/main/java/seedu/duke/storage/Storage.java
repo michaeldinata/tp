@@ -96,28 +96,28 @@ public class Storage {
         return sbFileString.toString();
     }
 
-    public void writeUserProfileFile(Ui ui, User user) {
+    public void writeUserProfileFile(User user) throws AniException {
         String userProfileString = user.toFileString();
-        writeFile(ui, userProfileFilePath, userProfileString);
+        writeFile(userProfileFilePath, userProfileString);
     }
 
-    public void writeWatchlistFile(Ui ui, ArrayList<Watchlist> watchlists) {
+    public void writeWatchlistFile(ArrayList<Watchlist> watchlists) throws AniException {
         StringBuilder sbWatchlistString = new StringBuilder();
         for (Watchlist watchlist : watchlists) {
             sbWatchlistString.append(watchlist.toFileString());
             sbWatchlistString.append(System.lineSeparator());
         }
-        writeFile(ui, watchlistFilePath, sbWatchlistString.toString());
+        writeFile(watchlistFilePath, sbWatchlistString.toString());
     }
 
-    private void writeFile(Ui ui, String filePath, String fileString) {
+    private void writeFile(String filePath, String fileString) throws AniException {
         new File(storageDirectory).mkdirs();
         try {
             FileWriter fileWriter = new FileWriter(filePath);
             fileWriter.write(fileString);
             fileWriter.close();
         } catch (IOException exception) {
-            ui.printErrorMessage("Error occurred while writing to file.");
+            throw new AniException("Error occurred while writing to file.");
         }
     }
 }

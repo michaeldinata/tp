@@ -4,8 +4,6 @@ import seedu.duke.anime.AnimeData;
 import seedu.duke.bookmark.Bookmark;
 import seedu.duke.exception.AniException;
 import seedu.duke.human.UserManagement;
-import seedu.duke.storage.Storage;
-import seedu.duke.ui.Ui;
 import seedu.duke.watchlist.Watchlist;
 
 import java.text.ParseException;
@@ -38,7 +36,7 @@ public class AddUserCommand extends Command {
 
 
     @Override
-    public void execute(Ui ui, Storage storage, AnimeData animeData, Watchlist currentWatchlist,
+    public String execute(AnimeData animeData, Watchlist currentWatchlist,
                         ArrayList<Watchlist> watchlists, Bookmark bookmark, UserManagement userManagement)
             throws AniException {
         if (name.isEmpty() || dob.isEmpty() || gender.isEmpty()) {
@@ -46,9 +44,9 @@ public class AddUserCommand extends Command {
         }
 
         try {
-            userManagement.addUser(name, dob, gender);
+            return "Successfully added new user: " + userManagement.addUser(name, dob, gender);
         } catch (ParseException e) {
-            ui.printErrorMessage(e.getMessage());
+            throw new AniException(e.getMessage());
         }
     }
 }
