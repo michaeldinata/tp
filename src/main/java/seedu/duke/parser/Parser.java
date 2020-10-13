@@ -3,7 +3,7 @@ package seedu.duke.parser;
 import seedu.duke.command.Command;
 import seedu.duke.command.AddUserCommand;
 import seedu.duke.command.EditProfileCommand;
-import seedu.duke.command.BrowseAnimeCommand;
+import seedu.duke.command.BrowseCommand;
 import seedu.duke.command.WatchlistCommand;
 import seedu.duke.command.AddToWatchlistCommand;
 import seedu.duke.command.BookmarkAnimeCommand;
@@ -33,7 +33,7 @@ public class Parser {
             return new EditProfileCommand(description);
  
         case "browse":
-            return new BrowseAnimeCommand(description);
+            return new BrowseCommand(description);
      
         case "watchlist":
             return new WatchlistCommand(description);
