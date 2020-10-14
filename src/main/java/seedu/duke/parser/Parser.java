@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Parser {
-    private static Logger logger = Logger.getLogger("ParserLogger");
+    private static Logger LOGGER = Logger.getLogger(Parser.class.getName());
 
     /**
      * Prints the main menu of the application
@@ -61,10 +61,10 @@ public class Parser {
 
     public static String[] parseUserInput(String input) throws AniException {
         if (input == null || input.isEmpty()) {
-            logger.log(Level.WARNING, "Exception occurred");
+            LOGGER.log(Level.WARNING, "Exception occurred");
             throw new AniException("Input is empty");
         }
-        logger.log(Level.INFO, "Parser processing succeeded");
+        LOGGER.log(Level.INFO, "Parser processing succeeded");
 
         String[] inputSplit = input.split(" ", 2);
         return inputSplit;
