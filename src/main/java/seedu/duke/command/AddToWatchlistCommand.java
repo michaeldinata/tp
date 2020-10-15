@@ -16,7 +16,7 @@ public class AddToWatchlistCommand extends Command {
     
     private String option;
     private String animeName = "";
-    private static Logger LOGGER = Logger.getLogger(AddToWatchlistCommand.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(AddToWatchlistCommand.class.getName());
 
     public AddToWatchlistCommand(String description) {
         LOGGER.setLevel(Level.WARNING);
