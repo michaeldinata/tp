@@ -13,9 +13,10 @@ public class SwitchUserCommand extends Command {
     protected static final String REQUIRE_ADDITIONAL_FIELD = " requires an additional field";
     protected static final String NOT_RECOGNISED = " is not recognised!";
 
-    private static Logger LOGGER = Logger.getLogger("SwitchUser");
+    private static Logger LOGGER = Logger.getLogger(Command.class.getName());
 
     public SwitchUserCommand(String description) {
+        LOGGER.setLevel(Level.WARNING);
         this.description = description;
     }
 

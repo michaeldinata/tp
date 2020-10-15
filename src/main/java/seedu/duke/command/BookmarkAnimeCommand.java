@@ -19,7 +19,6 @@ public class BookmarkAnimeCommand extends Command {
     private static final Logger LOGGER = Logger.getLogger(Command.class.getName());
 
     public BookmarkAnimeCommand(String description) throws AniException {
-        // Set log levels
         LOGGER.setLevel(Level.WARNING);
 
         this.description = description;

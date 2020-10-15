@@ -47,9 +47,10 @@ public class BrowseCommand extends Command {
     protected static final String SORT_RATING_ASCENDING = "Sorting by Rating Ascending (low to high)";
     protected static final String SORT_RATING_DESCENDING = "Sorting by Rating Descending (high to low)";
 
-    private static Logger LOGGER = Logger.getLogger("BrowseCommand");
+    private static Logger LOGGER = Logger.getLogger(Command.class.getName());
 
     public BrowseCommand(String description) {
+        LOGGER.setLevel(Level.WARNING);
         this.description = description;
         this.sortType = 0;
         this.order = 1;

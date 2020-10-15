@@ -19,6 +19,8 @@ public class AddToWatchlistCommand extends Command {
     private static Logger LOGGER = Logger.getLogger(Command.class.getName());
 
     public AddToWatchlistCommand(String description) {
+        LOGGER.setLevel(Level.WARNING);
+        
         String[] descriptionSplit = description.split(" ", 2);
         
         option = descriptionSplit[0];

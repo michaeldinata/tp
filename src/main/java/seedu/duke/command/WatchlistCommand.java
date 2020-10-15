@@ -17,7 +17,7 @@ public class WatchlistCommand extends Command {
 
     private final String option;
     private String optionInformation;
-    private static final Logger LOGGER = Logger.getLogger(WatchlistCommand.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(Command.class.getName());
 
     public WatchlistCommand(String description) {
         LOGGER.setLevel(Level.WARNING);
