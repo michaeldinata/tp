@@ -32,7 +32,7 @@ public class Storage {
 
     public User loadUser(Ui ui) {
         String fileString = readFile(ui, userFilePath);
-        LOGGER.info("Read \"" + fileString + "\" from \"" + userFilePath + "\".");
+        LOGGER.log(Level.INFO, "Read \"" + fileString + "\" from \"" + userFilePath + "\".");
         if (fileString.isBlank()) {
             return null;
         }
@@ -42,7 +42,7 @@ public class Storage {
 
     public ArrayList<Watchlist> loadWatchlist(Ui ui) {
         String fileString = readFile(ui, watchlistFilePath);
-        LOGGER.info("Read \"" + fileString + "\" from \"" + watchlistFilePath + "\".");
+        LOGGER.log(Level.INFO, "Read \"" + fileString + "\" from \"" + watchlistFilePath + "\".");
         if (fileString.isBlank()) {
             return new ArrayList<>();
         }
@@ -54,10 +54,10 @@ public class Storage {
         try {
             String userString = encoder.encodeUser(user);
             assert userString != null : "Encoded user string should not be null.";
-            LOGGER.info("Encoded user object string: " + userString);
+            LOGGER.log(Level.INFO, "Encoded user object string: " + userString);
             writeFile(userFilePath, userString);
         } catch (NullPointerException exception) {
-            LOGGER.warning("Received null user object.");
+            LOGGER.log(Level.WARNING, "Received null user object.");
             throw new AniException("AniChan could not save this user.");
         }
     }
@@ -66,10 +66,10 @@ public class Storage {
         try {
             String watchlistString = encoder.encodeWatchlist(watchlists);
             assert watchlistString != null : "Encoded watchlist string should not be null.";
-            LOGGER.info("Encoded watchlist string: " + watchlistString);
+            LOGGER.log(Level.INFO, "Encoded watchlist string: " + watchlistString);
             writeFile(watchlistFilePath, watchlistString);
         } catch (NullPointerException exception) {
-            LOGGER.warning("Received null watchlists object.");
+            LOGGER.log(Level.WARNING, "Received null watchlists object.");
             throw new AniException("AniChan could not save the watchlist.");
         }
     }
@@ -88,10 +88,10 @@ public class Storage {
         } catch (FileNotFoundException exception) {
             if (filePath.equals(userFilePath)) {
                 ui.printMessage("User file is not found, let's start afresh.");
-                LOGGER.info("User file does not exist at: " + userFilePath);
+                LOGGER.log(Level.INFO, "User file does not exist at: " + userFilePath);
             } else {
                 ui.printMessage("Watchlist file is not found, let's start a afresh.");
-                LOGGER.info("Watchlist file does not exist at: " + watchlistFilePath);
+                LOGGER.log(Level.INFO, "Watchlist file does not exist at: " + watchlistFilePath);
             }
         }
 
@@ -105,7 +105,7 @@ public class Storage {
             fileWriter.write(fileString);
             fileWriter.close();
         } catch (IOException exception) {
-            LOGGER.warning("Failed to write to file at: " + filePath);
+            LOGGER.log(Level.WARNING, "Failed to write to file at: " + filePath);
             throw new AniException("AniChan could not write to the file.");
         }
     }

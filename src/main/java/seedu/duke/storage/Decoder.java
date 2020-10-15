@@ -28,10 +28,10 @@ public class Decoder {
 
             user = new User(name, birthDate, gender);
             ui.printMessage("AniChan successfully loaded the user.");
-            LOGGER.info("User \"" + name + "\" successfully loaded.");
+            LOGGER.log(Level.INFO, "User \"" + name + "\" successfully loaded.");
         } catch (AniException | ParseException | IndexOutOfBoundsException exception) {
             ui.printErrorMessage("AniChan could not load the saved user.");
-            LOGGER.warning("Failed to load the user: " + exception.getMessage());
+            LOGGER.log(Level.WARNING, "Failed to load the user: " + exception.getMessage());
         }
 
         return user;
@@ -47,20 +47,20 @@ public class Decoder {
             Watchlist savedWatchList = createWatchlistObject(line);
             if (savedWatchList == null) {
                 hasCorruptedWatchlist = true;
-                LOGGER.warning("Failed to decode watchlist string: " + line);
+                LOGGER.log(Level.WARNING, "Failed to decode watchlist string: " + line);
                 continue;
             }
 
             watchlists.add(savedWatchList);
-            LOGGER.info("Successfully decode watchlist string: " + line);
+            LOGGER.log(Level.INFO, "Successfully decode watchlist string: " + line);
         }
 
         if (hasCorruptedWatchlist) {
             ui.printErrorMessage("AniChan could not load some of the saved watchlist(s).");
-            LOGGER.warning("Some saved watchlist(s) could not be loaded.");
+            LOGGER.log(Level.WARNING, "Some saved watchlist(s) could not be loaded.");
         } else {
             ui.printMessage("AniChan successfully loaded all of the saved watchlist(s).");
-            LOGGER.info("All saved watchlist(s) are loaded successfully.");
+            LOGGER.log(Level.INFO, "All saved watchlist(s) are loaded successfully.");
         }
 
         return watchlists;
@@ -74,7 +74,7 @@ public class Decoder {
 
         String watchlistName = lineSplit[0];
         String animeListString = lineSplit[1].substring(1, lineSplit[1].length() - 1);
-        LOGGER.info("Watchlist: " + watchlistName + System.lineSeparator() + "Anime List: " + animeListString);
+        LOGGER.log(Level.INFO, "Watchlist: " + watchlistName + System.lineSeparator() + "Anime List: " + animeListString);
 
         ArrayList<String> animeList = new ArrayList<>();
         String[] animes = animeListString.split(", ");
@@ -90,13 +90,13 @@ public class Decoder {
     private boolean isValidWatchlistString(String[] lineSplit) {
         boolean isValidSplitLength = (lineSplit.length == 2);
         if (!isValidSplitLength) {
-            LOGGER.warning("Invalid split length of " + lineSplit.length);
+            LOGGER.log(Level.WARNING, "Invalid split length of " + lineSplit.length);
             return false;
         }
 
         boolean isValidWatchlistString = (lineSplit[1].startsWith("[")) && (lineSplit[1].endsWith("]"));
         if (!isValidWatchlistString) {
-            LOGGER.warning("Watchlist string does not start with \"[\" and end with \"]\"");
+            LOGGER.log(Level.WARNING, "Watchlist string does not start with \"[\" and end with \"]\"");
             return false;
         }
 

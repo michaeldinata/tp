@@ -46,24 +46,24 @@ public class WatchlistCommand extends Command {
             commandOutput = listAllWatchlist(activeWatchlistList);
             break;
         default:
-            LOGGER.warning("Provided invalid option: " + option);
+            LOGGER.log(Level.WARNING, "Provided invalid option: " + option);
             throw new AniException("Watchlist command only accepts the option: \"-n\" and \"-l\".");
         }
 
-        LOGGER.info(commandOutput);
+        LOGGER.log(Level.INFO, commandOutput);
         return commandOutput;
     }
 
     private String createWatchlist(Storage storage, ArrayList<Watchlist> activeWatchlistList) throws AniException {
         if (optionInformation.isBlank()) {
-            LOGGER.warning("Watchlist name is empty.");
+            LOGGER.log(Level.WARNING, "Watchlist name is empty.");
             throw new AniException("Watchlist name cannot be empty.");
         }
 
         Watchlist newWatchlist = new Watchlist(optionInformation);
         boolean isWatchlistNameUnique = !activeWatchlistList.contains(newWatchlist);
         if (!isWatchlistNameUnique) {
-            LOGGER.warning(optionInformation + " is already one of the watchlist name.");
+            LOGGER.log(Level.WARNING, optionInformation + " is already one of the watchlist name.");
             throw new AniException("You already have a watchlist named \"" + optionInformation + "\".");
         }
 
