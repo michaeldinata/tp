@@ -16,7 +16,7 @@ public class BookmarkAnimeCommand extends Command {
     private int bookmarkEpisode;
     // e for edit, a for add, d for delete
     private String bookmarkAction;
-    private static final Logger LOGGER = Logger.getLogger(Command.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(BookmarkAnimeCommand.class.getName());
 
     public BookmarkAnimeCommand(String description) throws AniException {
         LOGGER.setLevel(Level.WARNING);
