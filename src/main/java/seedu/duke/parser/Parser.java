@@ -2,7 +2,7 @@ package seedu.duke.parser;
 
 import seedu.duke.command.Command;
 import seedu.duke.command.AddUserCommand;
-import seedu.duke.command.EditProfileCommand;
+import seedu.duke.command.SwitchUserCommand;
 import seedu.duke.command.BrowseCommand;
 import seedu.duke.command.WatchlistCommand;
 import seedu.duke.command.AddToWatchlistCommand;
@@ -11,7 +11,11 @@ import seedu.duke.command.HelpCommand;
 import seedu.duke.command.ExitCommand;
 import seedu.duke.exception.AniException;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Parser {
+    private static Logger LOGGER = Logger.getLogger(Command.class.getName());
 
     /**
      * Prints the main menu of the application
@@ -29,8 +33,8 @@ public class Parser {
         case "adduser":
             return new AddUserCommand(description);
                 
-        case "editprofile":
-            return new EditProfileCommand(description);
+        case "switchuser":
+            return new SwitchUserCommand(description);
  
         case "browse":
             return new BrowseCommand(description);
@@ -57,8 +61,10 @@ public class Parser {
 
     public static String[] parseUserInput(String input) throws AniException {
         if (input == null || input.isEmpty()) {
+            LOGGER.log(Level.WARNING, "Exception occurred");
             throw new AniException("Input is empty");
         }
+        LOGGER.log(Level.INFO, "Parser processing succeeded");
 
         String[] inputSplit = input.split(" ", 2);
         return inputSplit;

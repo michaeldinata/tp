@@ -2,10 +2,8 @@ package seedu.duke.command;
 
 import seedu.duke.anime.Anime;
 import seedu.duke.anime.AnimeData;
-import seedu.duke.bookmark.Bookmark;
 import seedu.duke.exception.AniException;
 import seedu.duke.human.UserManagement;
-import seedu.duke.watchlist.Watchlist;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,85 +11,113 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BrowseCommand extends Command {
+    protected static final int ANIME_PER_PAGE = 20;
+    protected static final String SORT_PARAM = "s";
+    protected static final String FILTER_PARAM = "f";
+    protected static final String ORDER_PARAM = "o";
+    protected static final String PAGE_PARAM = "p";
+    protected static final String ASCENDING_FIELD = "asc";
+    protected static final String DESCENDING_FIELD = "dsc";
+    protected static final String NAME_FIELD = "name";
+    protected static final String RATING_FIELD = "rating";
+    protected static final int ID_SORT = 0;
+    protected static final int ORDER_DESCENDING = 0;
+
     private int sortType;
     private int order;
     private int page;
     private String filter;
-    private static Logger logger = Logger.getLogger("BrowseLogger");
 
+    protected static final String LAST_ANIME_WARNING = "Printing Last Anime Series from source";
+    protected static final String BROWSE_PAGE_INDICATOR = "Browsing Page: ";
+    protected static final String OUT_OF_BOUND_PAGE_WARNING = "Getting page: Tried to start at index: ";
+    protected static final String OUT_OF_BOUND_PAGE_ERROR = "Invalid Page size!";
+    protected static final String PARAMETER_ERROR_HEADER = "Parameter : -";
+    protected static final String REQUIRE_ADDITIONAL_FIELD = " requires an additional field";
+    protected static final String TOO_MUCH_FIELDS = " has too much fields";
+    protected static final String INVALID_OPTION = " is not a valid option";
+    protected static final String NOT_RECOGNISED = " is not recognised!";
+    protected static final String NON_INTEGER_PROVIDED = "Please specify an Int value for page number!";
+    protected static final String ASSERT_SORT_TYPE = "sortType should be < 3";
+    protected static final String ASSERT_ORDER_TYPE = "order should be < 2";
+    protected static final String BROWSE_SETTINGS_CHANGED_INFO = "Default values modified";
+    protected static final String SORT_ID_DESCENDING = "Sorting by ID descending";
+    protected static final String SORT_NAME_ASCENDING = "Sorting by Name Ascending (A to Z)";
+    protected static final String SORT_NAME_DESCENDING = "Sorting by Name Descending (Z to A)";
+    protected static final String SORT_RATING_ASCENDING = "Sorting by Rating Ascending (low to high)";
+    protected static final String SORT_RATING_DESCENDING = "Sorting by Rating Descending (high to low)";
+
+    private static Logger LOGGER = Logger.getLogger("BrowseCommand");
 
     public BrowseCommand(String description) {
-        super(description);
-        //Default values for browse command
+        this.description = description;
         this.sortType = 0;
         this.order = 1;
         this.page = 1;
         this.filter = "";
-        //Browse Feature (Bare and un-refactored)
-        //-s sort [name/rating]       Default :No sort
-        //-o [asc/dsc]                Default :Descending
-        //-f [filter]                 Default :No filter
-        //-p [page 1 of 25 entries]   Default :1
-        //-i [Full Info]              Default :Off
     }
 
     @Override
-    public String execute(AnimeData animeData,
-                        Watchlist currentWatchlist, ArrayList<Watchlist> watchlists,
-                        Bookmark bookmark, UserManagement userManagement) throws AniException {
-        //Parameter Parser for Browse Command
-        String[] paramGiven = description.split("-");
-        if (paramGiven.length > 1) {
-            parameterParser(paramGiven);
-            logger.log(Level.INFO, "Default values modified");
-        }
-        //else use default values
-        ArrayList<Anime> usableList = animeData.animeDataList;
+    public String execute(AnimeData animeData, UserManagement userManagement) throws AniException {
+        setBrowseOptions();
+        ArrayList<Anime> usableList = animeData.getAnimeDataList();
 
-        int indexToPrint = (page - 1) * 20;
-        if (indexToPrint >= usableList.size()) {
-            logger.log(Level.SEVERE, "Getting page: Tried to start at index: " + indexToPrint);
-            throw new AniException("Invalid Page size!");
-        }
+        assert (sortType < 3) : ASSERT_SORT_TYPE;
+        assert (order < 2) : ASSERT_ORDER_TYPE;
 
-        //Assert to ensure that sortType and orderType are all usable int
-        assert (sortType < 3) : "sortType should be < 3";
-        assert (order < 2) : "order should be < 2";
         sortBrowseList(usableList);
-        //else no sort ascending
-
-        String result = "";
-        for (int i = indexToPrint; i < indexToPrint + 20; i++) {
-            Anime browseAnime = usableList.get(i);
-            result += Integer.toString(i + 1) + ". " + browseAnime.getAnimeName() + System.lineSeparator();
-            //System.out.println(i + 1 + ". " + browseAnime.getAnimeName());
-            if (i + 1 >= usableList.size()) {
-                logger.log(Level.WARNING, "Printing Last Anime Series from source");
-                break;
-            }
-        }
-        result += "Browsing Page: " + page;
-        //System.out.println("Browsing Page: " + page);
-        usableList.sort(Comparator.comparing(Anime::getAnimeID));
+        String result = buildBrowseOutput(usableList);
+        setSortType(3);
+        sortBrowseList(usableList);
         return result;
     }
 
+    private String buildBrowseOutput(ArrayList<Anime> usableList) throws AniException {
+        int indexToPrint = (page - 1) * 20;
+        if (indexToPrint >= usableList.size()) {
+            LOGGER.log(Level.WARNING, OUT_OF_BOUND_PAGE_WARNING + indexToPrint);
+            throw new AniException(OUT_OF_BOUND_PAGE_ERROR);
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (int i = indexToPrint; i < indexToPrint + ANIME_PER_PAGE; i++) {
+            Anime browseAnime = usableList.get(i);
+            result.append(i + 1).append(". ").append(browseAnime.getAnimeName()).append(System.lineSeparator());
+            if (i + 1 >= usableList.size()) {
+                LOGGER.log(Level.WARNING, LAST_ANIME_WARNING);
+                break;
+            }
+        }
+        result.append(BROWSE_PAGE_INDICATOR).append(page);
+        return result.toString();
+    }
+
+    private void setBrowseOptions() throws AniException {
+        String[] paramGiven = description.split("-");
+        if (paramGiven.length > 1) {
+            parameterParser(paramGiven);
+            LOGGER.log(Level.INFO, BROWSE_SETTINGS_CHANGED_INFO);
+        }
+    }
+
     private void sortBrowseList(ArrayList<Anime> usableList) {
-        if (sortType == 0 && order == 0) {
-            //logger.log(Level.INFO, "Sorting by ID descending");
+        if (sortType == ID_SORT && order == ORDER_DESCENDING) {
+            LOGGER.log(Level.INFO, SORT_ID_DESCENDING);
             usableList.sort(Comparator.comparing(Anime::getAnimeID).reversed());
-        } else if (sortType == 1 && order == 0) {
-            //logger.log(Level.INFO, "Sorting by Name Ascending (Z to A)");
-            usableList.sort(Comparator.comparing(Anime::getAnimeName).reversed());
-        } else if (sortType == 1) {
-            //logger.log(Level.INFO, "Sorting by Name Ascending (A to Z)");
+        } else if (sortType == 1 && order == ORDER_DESCENDING) {
+            LOGGER.log(Level.INFO, SORT_NAME_ASCENDING);
             usableList.sort(Comparator.comparing(Anime::getAnimeName));
-        } else if (sortType == 2 && order == 0) {
-            //logger.log(Level.INFO, "Sorting by Rating Ascending (low to high)");
+        } else if (sortType == 1) {
+            LOGGER.log(Level.INFO, SORT_NAME_DESCENDING);
+            usableList.sort(Comparator.comparing(Anime::getAnimeName).reversed());
+        } else if (sortType == 2 && order == ORDER_DESCENDING) {
+            LOGGER.log(Level.INFO, SORT_RATING_ASCENDING);
             usableList.sort(Comparator.comparing(Anime::getRating));
         } else if (sortType == 2) {
-            //logger.log(Level.INFO, "Sorting by Rating Descending (high to low)");
+            LOGGER.log(Level.INFO, SORT_RATING_DESCENDING);
             usableList.sort(Comparator.comparing(Anime::getRating).reversed());
+        } else if (sortType == 3) {
+            usableList.sort(Comparator.comparing(Anime::getAnimeID));
         }
     }
 
@@ -101,69 +127,66 @@ public class BrowseCommand extends Command {
             switch (paramParts[0].trim()) {
             case "": //skip the first empty param
                 break;
-            case "s":
+            case SORT_PARAM:
                 paramLengthCheck(paramParts);
                 checkSortType(paramParts);
                 break;
-            case "f":
+            case FILTER_PARAM:
                 paramLengthCheck(paramParts);
                 setFilter(paramParts[1]);
                 break;
-            case "o":
+            case ORDER_PARAM:
                 paramLengthCheck(paramParts);
                 checkOrderType(paramParts[1]);
                 break;
-            case "p":
+            case PAGE_PARAM:
                 paramLengthCheck(paramParts);
                 if (!isInt(paramParts[1].trim())) {
-                    throw new AniException("Please specify an Int value for page number!");
+                    throw new AniException(NON_INTEGER_PROVIDED);
                 }
                 setPage(Integer.parseInt(paramParts[1].trim()));
                 break;
             default:
-                String invalidParameter = "-" + param + " is an invalid parameter!";
+                String invalidParameter = PARAMETER_ERROR_HEADER + param + NOT_RECOGNISED;
                 throw new AniException(invalidParameter);
             }
         }
     }
 
     private void checkOrderType(String paramField) throws AniException {
-        //Logging here to set order type
         switch (paramField.trim()) {
-        case "asc":
+        case ASCENDING_FIELD:
             setOrder(0);
             break;
-        case "dsc":
+        case DESCENDING_FIELD:
             setOrder(1);
             break;
         default:
-            String paramFieldError = paramField + " is not a valid option";
+            String paramFieldError = paramField + INVALID_OPTION;
             throw new AniException(paramFieldError);
         }
     }
 
     private void checkSortType(String[] paramParts) throws AniException {
         switch (paramParts[1].trim()) {
-        case "name":
-            //Logging here to set sort type
+        case NAME_FIELD:
             setSortType(1);
             break;
-        case "rating":
+        case RATING_FIELD:
             setSortType(2);
             break;
         default:
-            String paramFieldError = paramParts[1] + " is not a valid option";
+            String paramFieldError = paramParts[1] + INVALID_OPTION;
             throw new AniException(paramFieldError);
         }
     }
 
     private void paramLengthCheck(String[] paramParts) throws AniException {
-        // Parameter Additional Field Check
         if (paramParts.length < 2) {
-            String invalidParameter = "Parameter : " + paramParts[0] + " requires an additional field";
+            String invalidParameter = PARAMETER_ERROR_HEADER + paramParts[0] + REQUIRE_ADDITIONAL_FIELD;
             throw new AniException(invalidParameter);
         } else if (paramParts.length > 2) {
-            String invalidParameter = "Parameter : " + paramParts[0] + " has too much fields";
+            String invalidParameter = PARAMETER_ERROR_HEADER + paramParts[0] + TOO_MUCH_FIELDS;
             throw new AniException(invalidParameter);
         }
     }
@@ -173,15 +196,27 @@ public class BrowseCommand extends Command {
     }
 
     public void setPage(int page) {
-        this.page = page;
+        this.page = Math.max(page, 1);
+    }
+
+    public int getPage() {
+        return page;
     }
 
     public void setSortType(int sortType) {
         this.sortType = sortType;
     }
 
+    public int getSortType() {
+        return sortType;
+    }
+
     public void setOrder(int order) {
         this.order = order;
+    }
+
+    public int getOrder() {
+        return order;
     }
 
     /**

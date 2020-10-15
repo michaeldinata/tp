@@ -4,19 +4,22 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import seedu.duke.storage.Storage;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AnimeStorage {
 
     /* Files */
     private static final String RELATIVE_DIR = System.getProperty("user.dir");
     private static final String FILE_SEPARATOR = File.separator;
-
+    private static final Logger LOGGER = Logger.getLogger(Anime.class.getName());
     private File dataFile;
     private String[] pathnames;
 
@@ -27,8 +30,13 @@ public class AnimeStorage {
     //}
 
     public AnimeStorage(String fileFolder) {
+        // Set log levels
+        LOGGER.setLevel(Level.WARNING);
+
+        LOGGER.info("Loading filenames from DataSource folder.");
         this.dataFile = new File(prepareFile(fileFolder));
         pathnames = dataFile.list();
+        LOGGER.info("Loading filenames successful.");
     }
 
     private String prepareFile(String fileFolder) {
@@ -36,13 +44,17 @@ public class AnimeStorage {
     }
 
     public ArrayList<Anime> readAnimeDatabase() throws IOException {
+        LOGGER.info("Retrieving information from DataSource.");
         ArrayList<Anime> animeDataList = new ArrayList<>();
         for (String pathname : pathnames) {
+            LOGGER.info("Currently extracting and parsing from " + dataFile.getPath() + FILE_SEPARATOR
+                    + pathname);
             FileReader fileData = new FileReader(dataFile.getPath() + FILE_SEPARATOR
                     + pathname);
             //System.out.println(fileData);
             parseJson(animeDataList, fileData);
         }
+        LOGGER.info("Retrieval and Parsing for anime object in DataSource Successful.");
         return animeDataList;
     }
 
@@ -51,8 +63,11 @@ public class AnimeStorage {
         JSONArray jsonList = new JSONArray();
         try {
             jsonList = (JSONArray) parser.parse(fileData);
+
         } catch (ParseException | IOException e) {
+            LOGGER.warning("Parsing file failed!");
             e.printStackTrace();
+
         }
 
         Iterator iterator = jsonList.iterator();

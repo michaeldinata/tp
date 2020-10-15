@@ -1,52 +1,57 @@
 package seedu.duke.command;
 
 import seedu.duke.anime.AnimeData;
-import seedu.duke.bookmark.Bookmark;
 import seedu.duke.exception.AniException;
 import seedu.duke.human.UserManagement;
-import seedu.duke.watchlist.Watchlist;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 
 public class AddUserCommand extends Command {
-    String name = null;
-    String dob = null;
-    String gender = null;
+    public static final String EXCEPTION_INVALID_PARAMETERS = "Invalid parameters detected!";
+    public static final String REGEX_CHARACTER_HYPHEN = "-";
+    public static final String REGEX_CHARACTER_SPACE = " ";
+    public static final String PARAMETER_NAME = "n";
+    public static final String PARAMETER_DATE_OF_BIRTH = "dob";
+    public static final String PARAMETER_GENDER = "g";
 
-    public AddUserCommand(String description) {
-        String[] descriptionSplit = description.split(" ", 7);
+    String name;
+    String dob;
+    String gender;
 
-        for (int i = 0; i < descriptionSplit.length - 1; i++) {
-            switch (descriptionSplit[i]) {
-            case "-n":
-                name = descriptionSplit[i + 1];
-                break;
-            case "-dob":
-                dob = descriptionSplit[i + 1];
-                break;
-            case "-g":
-                gender = descriptionSplit[i + 1];
-                break;
-            default:
-                // Continue!
+    public AddUserCommand(String userInput) throws AniException {
+        try {
+            String[] parametersSplit = userInput.split(REGEX_CHARACTER_HYPHEN);
+
+            for (String s : parametersSplit) {
+                String[] parameterTextSplit = s.split(REGEX_CHARACTER_SPACE, 2);
+
+                if (parameterTextSplit.length == 2 && !parameterTextSplit[0].isEmpty()) {
+                    switch (parameterTextSplit[0]) {
+                    case PARAMETER_NAME:
+                        name = parameterTextSplit[1];
+                        break;
+                    case PARAMETER_DATE_OF_BIRTH:
+                        dob = parameterTextSplit[1];
+                        break;
+                    case PARAMETER_GENDER:
+                        gender = parameterTextSplit[1];
+                        break;
+                    default:
+                        // All is good, continue!
+                    }
+                }
             }
+        } catch (IndexOutOfBoundsException e) {
+            throw new AniException(EXCEPTION_INVALID_PARAMETERS);
         }
     }
 
-
     @Override
-    public String execute(AnimeData animeData, Watchlist currentWatchlist,
-                        ArrayList<Watchlist> watchlists, Bookmark bookmark, UserManagement userManagement)
-            throws AniException {
-        if (name.isEmpty() || dob.isEmpty() || gender.isEmpty()) {
-            throw new AniException("Invalid parameters detected!");
-        }
-
+    public String execute(AnimeData animeData, UserManagement userManagement) throws AniException {
         try {
-            return "Successfully added new user: " + userManagement.addUser(name, dob, gender);
-        } catch (ParseException e) {
-            throw new AniException(e.getMessage());
+            return "Successfully added new user: " + userManagement.addUser(name.trim(), dob, gender);
+        } catch (ParseException | NullPointerException e) {
+            throw new AniException(EXCEPTION_INVALID_PARAMETERS);
         }
     }
 }

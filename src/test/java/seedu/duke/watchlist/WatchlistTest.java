@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+import static junit.framework.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class WatchlistTest {
     private Watchlist emptyWatchlist;
@@ -50,5 +52,16 @@ class WatchlistTest {
         expected += "2. Fullmetal Alchemist" + System.lineSeparator();
         expected += "3. R.O.D - READ OR DIE" + System.lineSeparator();
         assertEquals(filledWatchlist.toString(), expected);
+    }
+
+    @Test
+    void testEqual_duplicateWatchlist_returnsTrue() {
+        Watchlist duplicateEmptyWatchlist = new Watchlist("emptyWatchlist");
+        assertTrue(emptyWatchlist.equals(duplicateEmptyWatchlist));
+    }
+
+    @Test
+    void testEqual_uniqueWatchlist_returnsFalse() {
+        assertFalse(emptyWatchlist.equals(filledWatchlist));
     }
 }

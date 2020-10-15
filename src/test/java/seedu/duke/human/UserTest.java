@@ -13,7 +13,7 @@ class UserTest {
     public void testProfileCreation() throws ParseException, AniException {
         User testProfile = new User("Tim", "1/11/1960", "Other");
 
-        assertEquals("Tim-san", testProfile.getName());
+        assertEquals("Tim-san", testProfile.getHonorificName());
         assertEquals("01/11/1960", testProfile.getDobString());
     }
 }

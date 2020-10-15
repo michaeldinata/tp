@@ -1,7 +1,29 @@
-Abec
+FAKE
+111111
+Male
+BAD INPUT 2
+1/2/3
+FEMAL
+BAD INPUT 3 !@#$%^^(*%$(*#$ adsd453
+1/4/4
+11111
+Abec Steiner 33rd
 01/02/1996
 Female
+adduser -n John Doe 3rd -dob 12/12/1997 -g MaLe
+adduser -n John Doe 3rd -dob 12/12/1997 -g MALE
+adduser -n Bad Input GENDER 5555!!!  -dob 1/1/1997 -g fe
+adduser -n Bad Input GENDER 6655!!!  -dob 12/12/1987 -g 
+adduser -n Bad Input GENDER 8855!!!  -dob 12/12/1987 -g
+adduser -n Bad Input GENDER 1155!!!  -dob 12/12/1987  
+adduser -n Bad Input DATE1155!!!  -dob 12/12/ -g FEMAle
+adduser -n Bad Input DATE1155!!!  -dob 12/12 -g FEMAle
+adduser -n Bad Input DATE1155!!!  -dob abc -g FEMAle
+adduser -n Bad Input DATE1155!!!  -dob a/123 -g FEMAle
+adduser -n Bad Input DATE1155!!!  -dob 99999 -g FEMAle
+adduser -n GOOD PERson 1234 -dob 26/4/2001 -g feMaLe
 watchlist -n a
 watchlist -n b
+watchlist -l
 add -a MyFirstAnime
 exit

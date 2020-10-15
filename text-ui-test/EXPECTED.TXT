@@ -7,21 +7,69 @@
   /_/    \_\_| |_|_|\_____|_| |_|\__,_|_| |_|
 
 -------------------------------------------------------------
- User profile file is not found.
- Watchlist file is not found.
+ User file is not found, let's start afresh.
+ Watchlist file is not found, let's start a afresh.
 -------------------------------------------------------------
  What's your name?
- Hello Abec! What might your date of birth be? (DD/MM/YYYY)
- What might your gender be? (Male/Female/Other)
- Successfully added new user:
-Name: Abec
-Birthdate: 01/02/1996
-Gender: Female
+ #>  Hello FAKE! What might your date of birth be? (DD/MM/YYYY)
+ #>  What might your gender be? (Male/Female/Other)
+ #>  ☹ OOPS!!! Unparseable date: "111111"
+ What's your name?
+ #>  Hello BAD INPUT 2! What might your date of birth be? (DD/MM/YYYY)
+ #>  What might your gender be? (Male/Female/Other)
+ #>  ☹ OOPS!!! Unexpected gender: femal
+ What's your name?
+ #>  Hello BAD INPUT 3 !@#$%^^(*%$(*#$ adsd453! What might your date of birth be? (DD/MM/YYYY)
+ #>  What might your gender be? (Male/Female/Other)
+ #>  ☹ OOPS!!! Unexpected gender: 11111
+ What's your name?
+ #>  Hello Abec Steiner 33rd! What might your date of birth be? (DD/MM/YYYY)
+ #>  What might your gender be? (Male/Female/Other)
+ #>  Successfully added new user:
+ 
+ Name: Abec Steiner 33rd
+ Birthdate: 01/02/1996
+ Gender: Female
 
- Abec-chan(Default) #> Watchlist created successfully!
+ Abec Steiner 33rd-chan (Default) #>  Successfully added new user: 
+ Name: John Doe 3rd
+ Birthdate: 12/12/1997
+ Gender: Male
 
- Abec-chan(Default) #> Watchlist created successfully!
+ Abec Steiner 33rd-chan (Default) #>  ☹ OOPS!!! A user with John Doe 3rd already exist. Choose a different name!
 
- Abec-chan(Default) #> Anime added to watchlist
+ Abec Steiner 33rd-chan (Default) #>  ☹ OOPS!!! Unexpected gender: fe
 
- Abec-chan(Default) #> Sayonara!
+ Abec Steiner 33rd-chan (Default) #>  ☹ OOPS!!! Unexpected gender: 
+
+ Abec Steiner 33rd-chan (Default) #>  ☹ OOPS!!! Invalid parameters detected!
+
+ Abec Steiner 33rd-chan (Default) #>  ☹ OOPS!!! Invalid parameters detected!
+
+ Abec Steiner 33rd-chan (Default) #>  ☹ OOPS!!! Invalid parameters detected!
+
+ Abec Steiner 33rd-chan (Default) #>  ☹ OOPS!!! Invalid parameters detected!
+
+ Abec Steiner 33rd-chan (Default) #>  ☹ OOPS!!! Invalid parameters detected!
+
+ Abec Steiner 33rd-chan (Default) #>  ☹ OOPS!!! Invalid parameters detected!
+
+ Abec Steiner 33rd-chan (Default) #>  ☹ OOPS!!! Invalid parameters detected!
+
+ Abec Steiner 33rd-chan (Default) #>  Successfully added new user: 
+ Name: GOOD PERson 1234
+ Birthdate: 26/04/2001
+ Gender: Female
+
+ Abec Steiner 33rd-chan (Default) #>  Watchlist created successfully!
+
+ Abec Steiner 33rd-chan (Default) #>  Watchlist created successfully!
+
+ Abec Steiner 33rd-chan (Default) #>  Currently, you have 3 watchlist(s):
+	1. Default
+	2. a
+	3. b
+
+ Abec Steiner 33rd-chan (Default) #>  Anime added to watchlist!
+
+ Abec Steiner 33rd-chan (Default) #>  Sayonara Abec Steiner 33rd-chan!

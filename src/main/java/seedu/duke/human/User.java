@@ -1,36 +1,47 @@
 package seedu.duke.human;
 
+import seedu.duke.bookmark.Bookmark;
 import seedu.duke.exception.AniException;
+import seedu.duke.watchlist.Watchlist;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class User extends Human {
-    // Add Watchlist & Bookmarks here and/or UserManagement
+    public static final String GENDER_MALE = "male";
+    public static final String GENDER_FEMALE = "female";
+    public static final String GENDER_OTHER = "other";
+    public Bookmark bookmark;
 
-
-    private static final SimpleDateFormat DATE_MONTH_YEAR = new SimpleDateFormat("dd/MM/yyyy");
     protected Date birthdate;
     protected Gender gender;
+
+    private Watchlist activeWatchlist;
+    private ArrayList<Watchlist> watchlistList;
+
+    private static final SimpleDateFormat DATE_MONTH_YEAR = new SimpleDateFormat("dd/MM/yyyy");
 
     public User(String name, String birthdate, String gender) throws ParseException, AniException {
         super(name);
         setBirthdate(birthdate);
         setGender(gender);
+        bookmark = new Bookmark();
+        watchlistList = new ArrayList<>();
     }
 
     public void setGender(String genderString) throws AniException {
         genderString = genderString.toLowerCase();
 
         switch (genderString) {
-        case "male":
+        case GENDER_MALE:
             gender = Gender.Male;
             break;
-        case "female":
+        case GENDER_FEMALE:
             gender = Gender.Female;
             break;
-        case "other":
+        case GENDER_OTHER:
             gender = Gender.Other;
             break;
         default:
@@ -40,7 +51,15 @@ public class User extends Human {
 
     public void setBirthdate(String birthdateString) throws ParseException {
         birthdate = DATE_MONTH_YEAR.parse(birthdateString);
-        assert birthdate != null;
+        assert birthdate != null : "Birthdate cannot be null";
+    }
+
+    public void setActiveWatchlist(Watchlist activeWatchlist) {
+        this.activeWatchlist = activeWatchlist;
+    }
+
+    public void setWatchlistList(ArrayList<Watchlist> watchlistList) {
+        this.watchlistList = watchlistList;
     }
 
     public String getDobString() {
@@ -51,12 +70,28 @@ public class User extends Human {
         return gender;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Watchlist getActiveWatchlist() {
+        return activeWatchlist;
+    }
+
+    public String getActiveWatchlistName() {
+        return activeWatchlist.getName();
+    }
+
+    public ArrayList<Watchlist> getWatchlistList() {
+        return watchlistList;
+    }
+
     /**
      * Provides the name of the user with Japanese honorifics depending on his gender.
      *
      * @return name of user with honorifics.
      */
-    public String getName() {
+    public String getHonorificName() {
         if (gender == Gender.Female) {
             return name + "-chan";
         } else {
@@ -66,10 +101,6 @@ public class User extends Human {
 
     @Override
     public String toString() {
-        return "\nName: " + name + "\nBirthdate: " + getDobString() + "\nGender: " + getGender();
-    }
-
-    public String toFileString() {
-        return name + " | " + DATE_MONTH_YEAR.format(birthdate) + " | " + gender;
+        return "\n Name: " + name + "\n Birthdate: " + getDobString() + "\n Gender: " + getGender();
     }
 }

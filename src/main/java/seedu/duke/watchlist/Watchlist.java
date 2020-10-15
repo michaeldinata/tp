@@ -26,6 +26,7 @@ public class Watchlist {
 
     public void addAnimeToList(String animeName) {
         this.animeList.add(animeName);
+        assert this.animeList.contains(animeName) == true : "Watchlist should now contain new anime";
     }
 
     public String animeListToString() {
@@ -36,8 +37,7 @@ public class Watchlist {
         }
 
         for (int i = 0; i < animeList.size(); i++) {
-            sbAnimeList.append(i + 1);
-            sbAnimeList.append(". ");
+            sbAnimeList.append(i + 1).append(". ");
             sbAnimeList.append(animeList.get(i));
             sbAnimeList.append(System.lineSeparator());
         }
@@ -50,7 +50,13 @@ public class Watchlist {
         return name + System.lineSeparator() + animeListToString();
     }
 
-    public String toFileString() {
-        return name + " | " + animeList.toString();
+    @Override
+    public boolean equals(Object otherObject) {
+        if (getClass().equals(otherObject.getClass())) {
+            Watchlist otherWatchlist = (Watchlist) otherObject;
+            return this.getName().equals(otherWatchlist.getName());
+        }
+
+        return false;
     }
 }
