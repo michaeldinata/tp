@@ -50,12 +50,12 @@ public class BrowseCommand extends Command {
     private static Logger LOGGER = Logger.getLogger(BrowseCommand.class.getName());
 
     public BrowseCommand(String description) {
-        LOGGER.setLevel(Level.WARNING);
         this.description = description;
         this.sortType = 0;
         this.order = 1;
         this.page = 1;
         this.filter = "";
+        LOGGER.setLevel(Level.WARNING);
     }
 
     @Override
