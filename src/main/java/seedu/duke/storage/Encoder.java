@@ -23,7 +23,7 @@ public class Encoder {
         for (Watchlist watchlist : watchlists) {
             sbWatchlist.append(watchlist.getName());
             sbWatchlist.append(FILE_LINE_DELIMITER);
-            sbWatchlist.append(watchlist.getAnimeList().toString());
+            sbWatchlist.append(watchlist.getAnimeList());
             sbWatchlist.append(System.lineSeparator());
         }
 

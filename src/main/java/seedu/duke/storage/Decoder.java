@@ -76,11 +76,11 @@ public class Decoder {
         String watchlistName = lineSplit[0];
         String animeListString = lineSplit[1].substring(1, lineSplit[1].length() - 1);
 
-        ArrayList<String> animeList = new ArrayList<>();
+        ArrayList<Integer> animeList = new ArrayList<>();
         String[] animes = animeListString.split(", ");
         for (String anime : animes) {
             if (!anime.isBlank()) {
-                animeList.add(anime);
+                animeList.add(Integer.parseInt(anime));
             }
         }
 

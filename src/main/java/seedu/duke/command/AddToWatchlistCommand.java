@@ -1,5 +1,6 @@
 package seedu.duke.command;
 
+import seedu.duke.anime.Anime;
 import seedu.duke.anime.AnimeData;
 import seedu.duke.exception.AniException;
 import seedu.duke.human.User;
@@ -15,7 +16,7 @@ public class AddToWatchlistCommand extends Command {
     private static final String ADD_OPTION = "-a";
     
     private String option;
-    private String animeName = "";
+    private Integer animeIndex;
     private static Logger LOGGER = Logger.getLogger(Command.class.getName());
 
     public AddToWatchlistCommand(String description) {
@@ -23,7 +24,7 @@ public class AddToWatchlistCommand extends Command {
         
         option = descriptionSplit[0];
         if (descriptionSplit.length == 2) {
-            animeName = descriptionSplit[1];
+            animeIndex = Integer.parseInt(descriptionSplit[1]);
         }
     }
 
@@ -43,19 +44,22 @@ public class AddToWatchlistCommand extends Command {
         }
         assert option.equals("-a") == true : "option type should have been \"-a\".";
         addToWatchlist(storage, activeWatchlistList, activeWatchlist);
+        
+        Anime anime = animeData.getAnimeByID(animeIndex);
+        String animeName = anime.getAnimeName();
 
-        return "Anime added to watchlist!";
+        return animeName + " added to watchlist!";
     }
     
     public void addToWatchlist(Storage storage, ArrayList<Watchlist> activeWatchlistList, 
                                Watchlist activeWatchlist) throws AniException { 
-        if (animeName == null || animeName.trim().isEmpty()) {
-            LOGGER.log(Level.WARNING, "Anime name is empty, exception thrown");
-            throw new AniException("Anime name cannot be empty.");
+        if (animeIndex == null) {
+            LOGGER.log(Level.WARNING, "Anime ID is empty, exception thrown");
+            throw new AniException("Anime ID cannot be empty.");
         }
 
         int activeWatchlistIndex = activeWatchlistList.indexOf(activeWatchlist);
-        activeWatchlist.addAnimeToList(animeName);
+        activeWatchlist.addAnimeToList(animeIndex);
         activeWatchlistList.set(activeWatchlistIndex, activeWatchlist);
 
         storage.saveWatchlist(activeWatchlistList);

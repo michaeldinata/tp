@@ -1,17 +1,19 @@
 package seedu.duke.watchlist;
 
+import seedu.duke.anime.Anime;
+
 import java.util.ArrayList;
 
 public class Watchlist {
     private final String name;
-    private final ArrayList<String> animeList;
+    private final ArrayList<Integer> animeList;
 
     public Watchlist(String name) {
         this.name = name;
         this.animeList = new ArrayList<>();
     }
 
-    public Watchlist(String name, ArrayList<String> animeList) {
+    public Watchlist(String name, ArrayList<Integer> animeList) {
         this.name = name;
         this.animeList = animeList;
     }
@@ -20,13 +22,13 @@ public class Watchlist {
         return name;
     }
 
-    public ArrayList<String> getAnimeList() {
+    public ArrayList<Integer> getAnimeList() {
         return animeList;
     }
 
-    public void addAnimeToList(String animeName) {
-        this.animeList.add(animeName);
-        assert this.animeList.contains(animeName) == true : "Watchlist should now contain new anime";
+    public void addAnimeToList(Integer animeIndex) {
+        this.animeList.add(animeIndex);
+        assert this.animeList.contains(animeIndex) == true : "Watchlist should now contain new anime";
     }
 
     public String animeListToString() {
